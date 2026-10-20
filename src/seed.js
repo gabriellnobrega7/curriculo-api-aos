@@ -1,5 +1,4 @@
 import db from './models/index.js';
-
 const { User, AcademicExperience, ProfessionalExperience, Project } = db;
 
 async function populateDatabase() {
@@ -7,7 +6,7 @@ async function populateDatabase() {
     await db.sequelize.authenticate();
     console.log('Conexão estabelecida com sucesso.');
 
-    // Sincroniza as tabelas sem apagar dados se já existirem, ou força a criação
+    // ATENÇÃO: force: true apaga todas as tabelas e recria do zero
     await db.sequelize.sync({ force: true });
     console.log('Tabelas recriadas e limpas para o seed...');
 
@@ -28,21 +27,39 @@ async function populateDatabase() {
       endDate: '2027-07-01'
     });
 
-    await ProfessionalExperience.create({
-      UserId: user1.id,
-      company: 'Camed MicroCredito',
-      role: 'Jovem aprendiz',
-      description: 'Elaboração de planilhas, atendimento ao cliente, suporte ao usuário,etc.',
-      startDate: '2026-01-01',
-      endDate: null
-    });
+    await ProfessionalExperience.bulkCreate([
+      {
+        UserId: user1.id,
+        company: 'Camed MicroCredito',
+        role: 'Jovem aprendiz',
+        description: 'Elaboração de planilhas, atendimento ao cliente, suporte ao usuário, etc.',
+        startDate: '2026-01-01',
+        endDate: null
+      },
+      {
+        UserId: user1.id,
+        company: 'ETE Cícero Dias - Governo do Estado de Pernambuco',
+        role: 'Monitor de Matemática',
+        description: 'Atuação como monitor de matemática, auxiliando estudantes no reforço escolar e na resolução de exercícios.',
+        startDate: '2024-01-01',
+        endDate: '2024-12-31'
+      }
+    ]);
 
-    await Project.create({
-  UserId: user1.id,
-  title: 'Currículo API',
-  description: 'API RESTful desenvolvida com Node.js, Express, Sequelize e NeonDB.',
-  link: 'https://github.com/gabriellnobrega7/curriculo-api'
-});
+    await Project.bulkCreate([
+      {
+        UserId: user1.id,
+        title: 'Currículo API',
+        description: 'API RESTful desenvolvida com Node.js, Express, Sequelize e NeonDB.',
+        link: 'https://github.com/gabriellnobrega7/curriculo-api-aos'
+      },
+      {
+        UserId: user1.id,
+        title: 'Currículo App',
+        description: 'Aplicativo mobile de currículo/portfólio com React Native, Expo Router e Axios.',
+        link: 'https://github.com/gabriellnobrega7/Curriculo'
+}
+    ]);
 
     // --- PESSOA 2: Maria ---
     const user2 = await User.create({
@@ -70,12 +87,20 @@ async function populateDatabase() {
       endDate: null
     });
 
-    await Project.create({
-      UserId: user2.id,
-      title: 'Design System & Portfolio',
-      description: 'Sistema de componentes reutilizáveis para aplicações web.',
-      link: 'https://github.com/maria/design-system'
-    });
+    await Project.bulkCreate([
+      {
+        UserId: user2.id,
+        title: 'Design System & Portfolio',
+        description: 'Sistema de componentes reutilizáveis para aplicações web.',
+        link: 'https://github.com/maria/design-system'
+      },
+      {
+        UserId: user2.id,
+        title: 'App de Receitas (Protótipo)',
+        description: 'Protótipo de alta fidelidade no Figma para um app de receitas.',
+        link: 'https://github.com/maria/receitas-ui'
+      }
+    ]);
 
     console.log('✅ Dados inseridos com sucesso!');
     process.exit(0);
