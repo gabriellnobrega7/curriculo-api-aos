@@ -3,6 +3,7 @@ import User from './User.js';
 import AcademicExperience from './AcademicExperience.js';
 import ProfessionalExperience from './ProfessionalExperience.js';
 import Project from './Project.js';
+import Tarefa from './tarefa.js';
 
 // Definindo as relações (Associations)
 User.hasMany(AcademicExperience, { foreignKey: 'UserId', onDelete: 'CASCADE' });
@@ -19,7 +20,8 @@ const db = {
   User,
   AcademicExperience,
   ProfessionalExperience,
-  Project
+  Project,
+  Tarefa
 };
 
 export default db;
